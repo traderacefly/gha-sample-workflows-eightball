@@ -3,10 +3,10 @@ name: FoD SAST Scan and Import
 on: 
   workflow_dispatch:
   push:
-    branches: [sample]
+    branches: [main]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [sample]
+    branches: [main]
   
 
 jobs:
