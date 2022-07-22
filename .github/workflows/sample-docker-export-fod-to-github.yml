@@ -1,0 +1,25 @@
+name: Docker-based FoD to GitHub export
+
+on: [workflow_dispatch]
+
+jobs:
+  Export-FoD-To-GitHub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker://fortifydocker/fortify-vulnerability-exporter:latest
+        with:
+          export_config: /config/FoDToGitHub.yml
+          fod_baseUrl: ${{ secrets.FOD_EIGHTBALL_BASE_URL }}
+          fod_tenant: ${{ secrets.FOD_EIGHTBALL_TENANT }}
+          fod_user: ${{ secrets.FOD_EIGHTBALL_USER }}
+          fod_password: ${{ secrets.FOD_EIGHTBALL_PAT }}
+          fod_release_id: ${{ secrets.FOD_EIGHTBALL_RELEASE_ID }}
+      - uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ./gh-fortify-sast.sarif
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: sarif-files
+          path: ./gh-fortify-sast.sarif

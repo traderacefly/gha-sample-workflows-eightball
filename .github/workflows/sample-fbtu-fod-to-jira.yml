@@ -1,0 +1,25 @@
+name: FBTU-based FoD to JIRA export
+
+on: [workflow_dispatch]
+
+jobs:
+  Export-FoD-To-JIRA:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - uses: fortify/gha-setup-bugtracker-utility@v1
+      - env:
+          FBTU_FODBASEURL: ${{ secrets.FOD_EIGHTBALL_BASE_URL }}
+          FBTU_FODTENANT: ${{ secrets.FOD_EIGHTBALL_TENANT }}
+          FBTU_FODUSERNAME: ${{ secrets.FOD_EIGHTBALL_USER }}
+          FBTU_FODPASSWORD: ${{ secrets.FOD_EIGHTBALL_PAT }}
+          FBTU_FODRELEASEID: ${{ secrets.FOD_EIGHTBALL_RELEASE_ID }}
+          FBTU_JIRABASEURL: ${{ secrets.JIRA_BASE_URL }}
+          FBTU_JIRAUSERNAME: ${{ secrets.JIRA_USER }}
+          FBTU_JIRAPASSWORD: ${{ secrets.JIRA_TOKEN }}
+          FBTU_JIRAPROJECTKEY: ${{ secrets.JIRA_PROJECT_KEY }}
+        run: |
+          java -jar "$FBTU_JAR" -configFile "$FBTU_DIR/FoDToJira.xml" -FoDBaseUrl "$FBTU_FODBASEURL" -FoDTenant "$FBTU_FODTENANT" -FoDUserName "$FBTU_FODUSERNAME" -FoDPassword "$FBTU_FODPASSWORD" -FoDReleaseId "$FBTU_FODRELEASEID" --JiraBaseUrl "$FBTU_JIRABASEURL" -JiraUserName "$FBTU_JIRAUSERNAME" -JiraPassword "$FBTU_JIRAPASSWORD" -JiraProjectKey "$FBTU_JIRAPROJECTKEY"
