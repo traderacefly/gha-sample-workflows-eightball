@@ -14,7 +14,7 @@ jobs:
     # Use the appropriate runner for building your source code. 
     # Use Windows runner for projects that use msbuild. Additional changes to RUN commands will be required.
     runs-on: ubuntu-latest
-    environment: Eightball-FoD-environment
+    env: Eightball-FoD-environment
 
     steps:
       # Check out source code
